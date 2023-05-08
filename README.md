@@ -13,7 +13,7 @@ Los pasos a seguir para poder correr detección de objetos en el video de una we
 # Crear ambiente
 Para tener en orden nuestras paqueterias de python primero vamos a crear un ambiente llamado "deteccionobj" el cual tiene la version 3.6 de python
 ``` 
-conda create -n <nombre de tu entorno> python=3.6
+conda create -n <nombre de tu entorno> python=3.8
 ```
 
 Activamos el ambiente deteccionobj para asegurarnos que estemos en el ambiente correcto al momento de hacer la instalación de todas las paqueterias necesarias
