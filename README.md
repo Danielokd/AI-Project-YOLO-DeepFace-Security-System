@@ -27,7 +27,9 @@ pip install -r requirements.txt
 ```
 # Alertas de sonido
 Nos basamos en la libreria winsound (incluida en los requerimientos) para dar lugar a una alarma que se activara cuando no verifique el usuario, y otro para cuando haya acceso
-
+```
+import winsound
+```
 # Descargar los pesos del modelo entrenado 
 Para poder correr el modelo de yolo tendremos que descargar los pesos de la red neuronal, los pesos son los valores que tienen todas las conexiones entre las neuronas de la red neuronal de YOLO, este tipo de modelos son computacionalmente muy pesados de entrenar desde cero por lo cual descargar el modelo pre entrenado es una buena opción.
 

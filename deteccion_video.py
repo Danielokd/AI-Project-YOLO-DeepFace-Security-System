@@ -171,7 +171,7 @@ if __name__ == "__main__":
                                                 os.makedirs(carpeta_destino1)
 
                                         # Ruta completa del archivo de destino
-                                        ruta_archivo1 = os.path.join(carpeta_destino, 'nuevo.png')
+                                        ruta_archivo1 = os.path.join(carpeta_destino1, 'nuevo.png')
 
                                         # Guardar el frame capturado como un screenshot en la carpeta de destino
                                         cv2.imwrite(ruta_archivo1, cuadro)
