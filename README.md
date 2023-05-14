@@ -20,12 +20,13 @@ Activamos el ambiente deteccionobj para asegurarnos que estemos en el ambiente c
 ```
 conda activate <nombre de tu entorno>
 ```
-
 # Instalación de las paqueterias
 Estando dentro de nuestro ambiente vamos a instalar todas las paqueterias necesarias para correr nuestro detector de objetos en video, la lista de los paqueter y versiones a instalar están dentro del archivo requirements.txt por lo cual instalaremos haciendo referencia a ese archivo
 ```
 pip install -r requirements.txt
 ```
+# Alertas de sonido
+Nos basamos en la libreria winsound (incluida en los requerimientos) para dar lugar a una alarma que se activara cuando no verifique el usuario, y otro para cuando haya acceso
 
 # Descargar los pesos del modelo entrenado 
 Para poder correr el modelo de yolo tendremos que descargar los pesos de la red neuronal, los pesos son los valores que tienen todas las conexiones entre las neuronas de la red neuronal de YOLO, este tipo de modelos son computacionalmente muy pesados de entrenar desde cero por lo cual descargar el modelo pre entrenado es una buena opción.
