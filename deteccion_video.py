@@ -1,4 +1,5 @@
 from __future__ import division
+from deepface import DeepFace
 from models import *
 from utils.utils import *
 from utils.datasets import *
@@ -9,9 +10,11 @@ import cv2
 from PIL import Image
 import torch
 from torch.autograd import Variable
+import winsound
 
 
-
+esAdmin=False
+password="1234"
 def Convertir_RGB(img):
     # Convertir Blue, green, red a Red, green, blue
     b = img[:, :, 0].copy()
@@ -74,6 +77,13 @@ if __name__ == "__main__":
         out = cv2.VideoWriter('outp.mp4',cv2.VideoWriter_fourcc('M','J','P','G'), 10, (1280,960))
     colors = np.random.randint(0, 255, size=(len(classes), 3), dtype="uint8")
     a=[]
+    while True:
+                    rol=input("Si es administrador, digite la clave, de lo contrario digite: n")
+                    if rol==password:
+                        esAdmin=True
+                        break
+                    elif rol=="n":
+                        break
     while cap:
         ret, frame = cap.read()
         if ret is False:
@@ -95,16 +105,81 @@ if __name__ == "__main__":
 
         for detection in detections:
             if detection is not None:
+                
+
                 detection = rescale_boxes(detection, opt.img_size, RGBimg.shape[:2])
+                
+
+
                 for x1, y1, x2, y2, conf, cls_conf, cls_pred in detection:
-                 if classes[int(cls_pred)]=="person": 
+                 if classes[int(cls_pred)]=="person":
                       box_w = x2 - x1
                       box_h = y2 - y1
+                      area=box_w*box_h
+                      areaEscala=area/1000000
+                      #El area calibrada para la deteccion de rostros de 1.02 * 10^6 pixeles
                       color = [int(c) for c in colors[int(cls_pred)]]
-                      print("Se detecto {} en X1: {}, Y1: {}, X2: {}, Y2: {}".format(classes[int(cls_pred)], x1, y1, x2, y2))
+                      print("Se detecto {} con un area de {}".format(classes[int(cls_pred)], areaEscala))
                       frame = cv2.rectangle(frame, (int(x1), int(y1 + box_h)), (int(x2), int(y1)), color, 5)
+                      if areaEscala >=1.02:
+                            print("Esta cerca")
+                            #Toma del screenshot
+                            # Leer un frame del video
+                            ret, cuadro = cap.read() #Cuadro es la variable para guardar el screenshot
+
+                            # Guardar el frame como un screenshot
+                            # Directorio de la carpeta donde se guardará el screenshot
+                            carpeta_destino = 'C:\IA\proyectoFinal\prueba4Proyecto3.8\screenshots_deep'
+
+                            # Verificar si la carpeta de destino existe, de lo contrario, crearla
+                            if not os.path.exists(carpeta_destino):
+                                    os.makedirs(carpeta_destino)
+
+                            # Ruta completa del archivo de destino
+                            ruta_archivo = os.path.join(carpeta_destino, 'screenshot.png')
+
+                            # Guardar el frame capturado como un screenshot en la carpeta de destino
+                            cv2.imwrite(ruta_archivo, cuadro)
+                            #Prueba 
+                            #imagen 
+                            persona=DeepFace.extract_faces(ruta_archivo)
+                            #vector
+                            #vector_imagen=DeepFace.represent(persona)
+                            comparar=DeepFace.find(img_path=ruta_archivo,db_path='C:\IA\proyectoFinal\prueba4Proyecto3.8\dataset\Dataset_robotkillers',model_name="VGG-Face",enforce_detection=False)  
+                            primer_df=comparar[0]#Tomamos la primera fila del data frame que contiene los resutlados de busqueda
+                            ruta_find=primer_df.iloc[0,0]
+                            print("Ruta: ",ruta_find)#Imprimimos la ruta de la deteccion con la menor distancia (la mas parecida)
+                            #Guardamos los datos de comparacion en un diccionario
+                            datos_comparacion=DeepFace.verify(ruta_archivo, ruta_find, model_name="VGG-Face", detector_backend='opencv', distance_metric='cosine', enforce_detection=True, align=True, normalization='base')
+                            claves = list(datos_comparacion.values())#Casteamos a lista las claves obtenidas
+                            verificado=claves[0]#Booleano que determina verificacion
+                            if verificado==True:
+                                print("PUEDE PASAR")
+                                winsound.Beep(1000,1000)
+                            elif verificado== False:
+                                winsound.Beep(200, 1000)
+                                print("ALERTA!!!!!!!!!!! NO RECONOCIDO")
+                                if esAdmin==True:
+                                    agregar=input("Desea agregar al usuario?")
+                                    if agregar==True:
+                                        # Guardar el frame como un screenshot
+                                        # Directorio de la carpeta donde se guardará el screenshot
+                                        carpeta_destino1 = 'C:\IA\proyectoFinal\prueba4Proyecto3.8\dataset\Dataset_robotkillers'
+
+                                        # Verificar si la carpeta de destino existe, de lo contrario, crearla
+                                        if not os.path.exists(carpeta_destino1):
+                                                os.makedirs(carpeta_destino1)
+
+                                        # Ruta completa del archivo de destino
+                                        ruta_archivo1 = os.path.join(carpeta_destino1, 'nuevo.png')
+
+                                        # Guardar el frame capturado como un screenshot en la carpeta de destino
+                                        cv2.imwrite(ruta_archivo1, cuadro)
+                                        
+
                       cv2.putText(frame, classes[int(cls_pred)], (int(x1), int(y1)), cv2.FONT_HERSHEY_SIMPLEX, 1, color, 2)# Nombre de la clase detectada
                       cv2.putText(frame, str("%.2f" % float(conf)), (int(x2),int( y2 - box_h)), cv2.FONT_HERSHEY_SIMPLEX, 0.5,color, 2) # Certeza de prediccion de la clase
+                      
         #
         #Convertimos de vuelta a BGR para que cv2 pueda desplegarlo en los colores correctos
         

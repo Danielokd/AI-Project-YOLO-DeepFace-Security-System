@@ -11,21 +11,28 @@ Nosotros decidimos adaptarlo a que detecte solo una clase, llamada persona.
 Los pasos a seguir para poder correr detección de objetos en el video de una webcam son los siguientes (La creación del ambiente asume que Anaconda esta instalado en la computadora):
 
 # Crear ambiente
-Para tener en orden nuestras paqueterias de python primero vamos a crear un ambiente llamado "deteccionobj" el cual tiene la version 3.6 de python
+Para tener en orden nuestras paqueterias de python primero vamos a crear un ambiente llamado "deteccionobj" el cual tiene la version 3.8 de python
 ``` 
-conda create -n <nombre de tu entorno> python=3.6
+conda create -n <nombre de tu entorno> python=3.8
 ```
 
 Activamos el ambiente deteccionobj para asegurarnos que estemos en el ambiente correcto al momento de hacer la instalación de todas las paqueterias necesarias
 ```
 conda activate <nombre de tu entorno>
 ```
-
 # Instalación de las paqueterias
 Estando dentro de nuestro ambiente vamos a instalar todas las paqueterias necesarias para correr nuestro detector de objetos en video, la lista de los paqueter y versiones a instalar están dentro del archivo requirements.txt por lo cual instalaremos haciendo referencia a ese archivo
 ```
 pip install -r requirements.txt
 ```
+# Alertas de sonido
+Nos basamos en la libreria winsound para dar lugar a una alarma que se activara cuando no verifique el usuario, y otro para cuando haya acceso
+
+Se puede acceder a ella a través de importación:
+```
+import winsound
+```
+
 
 # Descargar los pesos del modelo entrenado 
 Para poder correr el modelo de yolo tendremos que descargar los pesos de la red neuronal, los pesos son los valores que tienen todas las conexiones entre las neuronas de la red neuronal de YOLO, este tipo de modelos son computacionalmente muy pesados de entrenar desde cero por lo cual descargar el modelo pre entrenado es una buena opción.
@@ -45,11 +52,17 @@ Por ultimo corremos este comando el cual activa la camara web para poder hacer d
 python deteccion_video.py
 ```
 
+
 # Modificaciones
 Si en vez de correr detección de objetos sobre la webcam lo que quieres es correr el modelo sobre un video que ya fue pre grabado tienes que cambiar el comando para correr el codigo a:
 
 ```
 python deteccion_video.py --webcam 0 --directorio_video <directorio_al_video.mp4>
+```
+# Instalacion de DeepFace 
+Debemos correr el siguiente comando desde el terminal para la instalación de eepface, es importante tener en cuenta que este requiere una versión de Open CV mayor a 4.5.5
+```
+pip install deepface
 ```
 
 # Entrenamiento 
