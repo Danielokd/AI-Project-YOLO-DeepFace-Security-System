@@ -166,9 +166,9 @@ if __name__ == "__main__":
                                 print("ALERTA!!!!!!!!!!! NO RECONOCIDO")
                                 if esAdmin==True:
                                     agregar=bool(input("Desea agregar al usuario?"))
-                                    with open("C:\IA\proyectoFinal\prueba4Proyecto3.8\dataset\Dataset_robotkillers\representations_vgg_face.pkl", "rb") as archivo:
-                                        datos = pickle.load(archivo)
-                                        print(datos)
+                                    #with open("C:\IA\proyectoFinal\prueba4Proyecto3.8\dataset\Dataset_robotkillers\representations_vgg_face.pkl", "rb") as archivo:
+                                        #datos = pickle.load(archivo)
+                                        #print(datos)
                                     if agregar==True:
                                         # Guardar el frame como un screenshot
                                         # Directorio de la carpeta donde se guardará el screenshot
