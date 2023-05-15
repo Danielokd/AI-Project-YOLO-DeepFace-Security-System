@@ -11,7 +11,7 @@ from PIL import Image
 import torch
 from torch.autograd import Variable
 import winsound
-
+import pickle
 
 esAdmin=False
 password="1234"
@@ -148,11 +148,16 @@ if __name__ == "__main__":
                             comparar=DeepFace.find(img_path=ruta_archivo,db_path='C:\IA\proyectoFinal\prueba4Proyecto3.8\dataset\Dataset_robotkillers',model_name="VGG-Face",enforce_detection=False)  
                             primer_df=comparar[0]#Tomamos la primera fila del data frame que contiene los resutlados de busqueda
                             ruta_find=primer_df.iloc[0,0]
-                            print("Ruta: ",ruta_find)#Imprimimos la ruta de la deteccion con la menor distancia (la mas parecida)
+                            distancia=primer_df.iloc[0,5]
+                            print("Ruta: {} distancia: {}".format(ruta_find, distancia))#Imprimimos la ruta de la deteccion con la menor distancia (la mas parecida)
                             #Guardamos los datos de comparacion en un diccionario
                             datos_comparacion=DeepFace.verify(ruta_archivo, ruta_find, model_name="VGG-Face", detector_backend='opencv', distance_metric='cosine', enforce_detection=True, align=True, normalization='base')
                             claves = list(datos_comparacion.values())#Casteamos a lista las claves obtenidas
                             verificado=claves[0]#Booleano que determina verificacion
+                            if distancia>0.2:
+                                 verificado=False
+                            print("Distancia: ",claves[1])
+                            print("Thres: ",claves[2])
                             if verificado==True:
                                 print("PUEDE PASAR")
                                 winsound.Beep(1000,1000)
@@ -160,7 +165,10 @@ if __name__ == "__main__":
                                 winsound.Beep(200, 1000)
                                 print("ALERTA!!!!!!!!!!! NO RECONOCIDO")
                                 if esAdmin==True:
-                                    agregar=input("Desea agregar al usuario?")
+                                    agregar=bool(input("Desea agregar al usuario?"))
+                                    with open("C:\IA\proyectoFinal\prueba4Proyecto3.8\dataset\Dataset_robotkillers\representations_vgg_face.pkl", "rb") as archivo:
+                                        datos = pickle.load(archivo)
+                                        print(datos)
                                     if agregar==True:
                                         # Guardar el frame como un screenshot
                                         # Directorio de la carpeta donde se guardará el screenshot
@@ -172,9 +180,9 @@ if __name__ == "__main__":
 
                                         # Ruta completa del archivo de destino
                                         ruta_archivo1 = os.path.join(carpeta_destino1, 'nuevo.png')
-
+                                        if not os.path.exists(ruta_archivo1):
                                         # Guardar el frame capturado como un screenshot en la carpeta de destino
-                                        cv2.imwrite(ruta_archivo1, cuadro)
+                                              cv2.imwrite(ruta_archivo1, cuadro)
                                         
 
                       cv2.putText(frame, classes[int(cls_pred)], (int(x1), int(y1)), cv2.FONT_HERSHEY_SIMPLEX, 1, color, 2)# Nombre de la clase detectada
