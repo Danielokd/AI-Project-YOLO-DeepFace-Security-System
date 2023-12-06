@@ -102,3 +102,8 @@ python split_train_val.py
 ```
 python deteccion_video.py --model_def config/yolov3-custom.cfg --checkpoint_model checkpoints/yolov3_ckpt_99.pth --class_path data/custom/classes.names  --weights_path checkpoints/yolov3_ckpt_99.pth  --conf_thres 0.85
 ```
+## Desarrollado por:
+Daniel Felipe Melo 
+David Vargas 
+Alejandro Arteaga Medina 
+Esteban Castro 
