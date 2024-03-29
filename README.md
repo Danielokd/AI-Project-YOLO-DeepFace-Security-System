@@ -104,6 +104,9 @@ python deteccion_video.py --model_def config/yolov3-custom.cfg --checkpoint_mode
 ```
 ## Desarrollado por:
 Daniel Felipe Melo 
+
 David Vargas 
+
 Alejandro Arteaga Medina 
+
 Esteban Castro 
